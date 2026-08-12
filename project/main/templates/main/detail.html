@@ -90,6 +90,14 @@
             {% endif %}
 
         </div>
+        <div class="book-image">
+            <form method="post" action="{% url 'save_comment' book.id %}">
+                {% csrf_token %}
+                <textarea name="text" style="font-size: 22pt; padding: 15px; border-radius: 15px;" rows="4" cols="40">
+                </textarea>
+                <button type="submit" style="font-size: 22pt; padding: 15px; border-radius: 15px;">Send</button>
+            </form>
+        </div>
 
 
         <!-- Orqaga -->
@@ -100,7 +108,11 @@
             ← Ortga
 
         </a>
-
+        {% for comment in comments %}
+        <div class="introduction">
+            {{ comment.text }}
+        </div>
+         {% endfor %}
     </div>
 
 </div>

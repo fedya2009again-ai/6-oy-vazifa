@@ -1,8 +1,8 @@
 from django.db.models import Model
-from django.shortcuts import render
-from django.http import Http404
+from django.shortcuts import render, redirect
+from django.http import Http404, HttpRequest
 
-from .models import Category, Book
+from .models import Category, Book, Comment
 
 
 def index(request):
@@ -27,10 +27,22 @@ def books_by_category(request, category_id):
 
 def detail(request, book_id):
     book = Book.objects.get(id=book_id)
-    context = {"book": book}
+    comments = Comment.objects.filter(book_id=book_id)
+    context = {"book": book, 'comments':comments}
     return render(request, "main/detail.html", context)
 
-
+def save_comment(request: HttpRequest, book_id):
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            text = request.POST.get('text')
+            book = Book.objects.get(id=book_id)
+            comment = Comment.objects.create(text=text, book=book, user=request.user)
+            return redirect('detail', book_id=book_id)
+        else:
+            return redirect('home')
+    else:
+        print('login qiling')
+        return redirect('home')
 
 
 
