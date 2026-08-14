@@ -40,13 +40,13 @@
 
             {% if book.price >= 10 %}
 
-                <span class="expensive">
+            <span class="expensive">
                     qimmat
                 </span>
 
             {% else %}
 
-                <span class="cheap">
+            <span class="cheap">
                     arzon
                 </span>
 
@@ -59,15 +59,15 @@
 
         {% if book.introduction %}
 
-            <div class="introduction">
+        <div class="introduction">
 
-                <h2>Muqaddima</h2>
+            <h2>Muqaddima</h2>
 
-                <p>
-                    {{ book.introduction }}
-                </p>
+            <p>
+                {{ book.introduction }}
+            </p>
 
-            </div>
+        </div>
 
         {% endif %}
 
@@ -78,23 +78,24 @@
 
             {% if book.image %}
 
-                <img src="{{ book.image.url }}"
-                     alt="{{ book.title }}">
+            <img src="{{ book.image.url }}"
+                 alt="{{ book.title }}">
 
             {% else %}
 
-                <img
+            <img
                     src="https://demofree.sirv.com/nope-not-here.jpg"
                     alt="Rasm mavjud emas">
 
             {% endif %}
 
         </div>
+
         <div class="book-image">
-            <form method="post" action="{% url 'save_comment' book.id %}">
+            <form method="post" action="{% url 'save_comment' book.pk %}">
                 {% csrf_token %}
-                <textarea name="text" style="font-size: 22pt; padding: 15px; border-radius: 15px;" rows="4" cols="40">
-                </textarea>
+                <textarea name="text" style="font-size: 22pt; padding: 15px; border-radius: 15px;" rows="4"
+                          cols="40"></textarea>
                 <button type="submit" style="font-size: 22pt; padding: 15px; border-radius: 15px;">Send</button>
             </form>
         </div>
@@ -108,11 +109,27 @@
             ← Ortga
 
         </a>
+
+
+        <h2 style="margin-top: 30px;">Qoldirilgan izohlar</h2>
+
         {% for comment in comments %}
         <div class="introduction">
-            {{ comment.text }}
+            <p>{{ comment.text }}</p>
+            <p style="font-size: 10pt;">
+                <b>Author: </b><a href="#">{{ comment.user.username }}</a>.
+                <span style="font-size: 8pt;"><b>{{ comment.created }}</b></span>
+            </p>
+            {% if request.user.is_authenticated and request.user == comment.user %}
+            <a href="{% url 'update_comment' comment.id %}">Update</a>
+            {% endif %}
+
+            {% if request.user.is_authenticated and request.user == comment.user or request.user.is_superuser %}
+            <a href="{% url 'delete' comment.id %}">Delete</a>
+            {% endif %}
         </div>
-         {% endfor %}
+        {% endfor %}
+
     </div>
 
 </div>

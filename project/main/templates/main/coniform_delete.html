@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form method="post" action="{% url 'delete' comment.id %}">
+    {% csrf_token %}
+    <h2>Shu kommentni ochirmoqchimisiz? -> {{ comment.text }}</h2>
+    <button type="submit">Ha</button>
+</form>
+
+<a href="{% url 'detail' comment.id%}">Ortga</a>
+
+</body>
+</html>
